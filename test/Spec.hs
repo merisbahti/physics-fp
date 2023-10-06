@@ -1,4 +1,4 @@
-import Lib (someFunc)
+import Lib
 
 main :: IO ()
-main = someFunc
+main = print . inc $ 1
