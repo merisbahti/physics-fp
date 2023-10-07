@@ -1,4 +1,10 @@
-import Lib
+import Test.HUnit
 
-main :: IO ()
-main = print . inc $ inc $ add 2 2
+main :: IO Counts
+main = runTestTT tests
+
+tests :: Test
+tests =
+  TestList
+    [ TestCase (assertEqual "something" "ab" ("a" ++ "bc"))
+    ]
