@@ -7,15 +7,15 @@ import Lib (R, Time)
 import Vec (Acceleration, PosVec, Vec (zComp), Velocity, iHat, jHat, kHat, magnitude, negateV, positionCA, (*^), (^*), (^+^), (^-^))
 
 -- 10.1
-v0 = 20 *^ iHat
+v0_ = 20 *^ iHat
 
-v1 = 20 *^ iHat ^-^ 9.8 *^ kHat
+v1_ = 20 *^ iHat ^-^ 9.8 *^ kHat
 
-v :: Double -> Vec
-v t = 20 *^ iHat ^-^ 9.8 *^ t *^ kHat
+v_ :: Double -> Vec
+v_ t = 20 *^ iHat ^-^ 9.8 *^ t *^ kHat
 
-r :: Double -> Vec
-r t = (30 *^ jHat) ^+^ (20 *^ t *^ iHat) ^-^ (4.9 *^ t *^ t *^ kHat)
+r_ :: Double -> Vec
+r_ t = (30 *^ jHat) ^+^ (20 *^ t *^ iHat) ^-^ (4.9 *^ t *^ t *^ kHat)
 
 -- 10.2
 vecIntegral :: R -> (R -> Vec) -> R -> R -> Vec
@@ -37,3 +37,20 @@ maxHeight pos vel = maximum . map zComp $ pos : takeWhile ((> 0) . zComp) values
 -- 10.4
 speedCA :: Velocity -> Acceleration -> Time -> R
 speedCA vel acc t = magnitude $ vel ^+^ (acc ^* t)
+
+-- 10.5
+projectileVel :: Velocity -> Acceleration -> Time -> PosVec
+projectileVel v0 = positionCA v0 (9.81 *^ negateV kHat)
+
+-- 10.6
+data Vec2d = Vec2d
+  { xComp :: R,
+    yComp :: R
+  }
+  deriving (Eq, Show)
+
+magAngleFromVec2d :: Vec2d -> (R, R)
+magAngleFromVec2d (Vec2d x y) = (sqrt $ x ** 2 + y ** 2, atan2 y x)
+
+vec2dFromMagAngle :: R -> R -> Vec2d
+vec2dFromMagAngle mag angle = Vec2d (mag * sin angle) (mag * cos angle)

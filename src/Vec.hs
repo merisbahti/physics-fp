@@ -71,3 +71,6 @@ type PosVec = Vec
 
 positionCA :: PosVec -> Velocity -> Acceleration -> Time -> PosVec
 positionCA r0 vInit a t = r0 ^+^ (vInit ^* t) ^+^ (0.5 *^ a ^* (t * t))
+
+velocityCA :: Velocity -> Acceleration -> Time -> Velocity
+velocityCA v0 a0 t = v0 ^+^ (a0 ^* t)
