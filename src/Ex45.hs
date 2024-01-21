@@ -1,8 +1,9 @@
-module Ex45 (pos1, vel1a, acc1a, vel1n, acc1n, velDifference, plottedVelDifference, plottedAccDifference) where
+module Ex45 (pos1, vel1a, acc1a, vel1n, acc1n, velDifference, plottedVelDifference, plottedAccDifference, vecSum) where
 
 import Graphics.Gnuplot.Plot.TwoDimensional (linearScale)
 import Graphics.Gnuplot.Simple (plotFunc)
 import Lib (derive)
+import Vec
 
 pos1 :: Double -> Double
 pos1 t =
@@ -39,3 +40,6 @@ plottedVelDifference = plotFunc [] (linearScale 1000 (-10, 10 :: Double)) velDif
 
 plottedAccDifference :: IO ()
 plottedAccDifference = plotFunc [] (linearScale 1000 (-10, 10 :: Double)) accDifference
+
+vecSum :: [Vec] -> Vec
+vecSum = foldl (^+^) zeroV
