@@ -3,8 +3,9 @@
 module Ex10 where
 
 import Ex45 (vecSum)
+import Graphics.Gnuplot.Simple
 import Lib (R, Time)
-import Vec (Acceleration, PosVec, Vec (Vec, zComp), Velocity, iHat, jHat, kHat, magnitude, negateV, positionCA, vec, (*^), (^*), (^+^), (^-^))
+import Vec (Acceleration, PosVec, Vec (Vec, zComp), Velocity, iHat, jHat, kHat, magnitude, negateV, positionCA, speedRateChange, vec, (*^), (^*), (^+^), (^-^))
 
 -- 10.1
 v0_ = 20 *^ iHat
@@ -67,3 +68,29 @@ magAngles (Vec x y z) =
     atan2 (sqrt $ x ** 2 + y ** 2) z,
     atan2 y x
   )
+
+-- 10.9
+
+gEarth = Vec 0 0 (-9.8)
+
+-- Inital speed 25 m/s
+-- 52 degrees from horizontal
+vBallX = 0
+
+vBallY = 25 * cos (52 * pi / 180)
+
+vBallZ = 25 * sin (52 * pi / 180)
+
+vBall0 = Vec vBallX vBallY vBallZ
+
+vBall :: R -> Vec
+vBall t = (vBall0 ^* t) ^+^ ((1 / 2) *^ gEarth ^* (t ** 2))
+
+speedRateChangeBall :: R -> R
+speedRateChangeBall t = speedRateChange (vBall t) gEarth
+
+solved = plotFunc [] (linearScale 1000 (0, 50 :: Double)) speedRateChangeBall
+
+vBallGraph = plotFunc [] (linearScale 1000 (0, 10 :: Double)) (zComp . vBall)
+
+-- At around 2 secs the speedRateChange is -5
