@@ -4,7 +4,7 @@ module Ex10 where
 
 import Ex45 (vecSum)
 import Lib (R, Time)
-import Vec (Acceleration, PosVec, Vec (zComp), Velocity, iHat, jHat, kHat, magnitude, negateV, positionCA, (*^), (^*), (^+^), (^-^))
+import Vec (Acceleration, PosVec, Vec (Vec, zComp), Velocity, iHat, jHat, kHat, magnitude, negateV, positionCA, vec, (*^), (^*), (^+^), (^-^))
 
 -- 10.1
 v0_ = 20 *^ iHat
@@ -54,3 +54,16 @@ magAngleFromVec2d (Vec2d x y) = (sqrt $ x ** 2 + y ** 2, atan2 y x)
 
 vec2dFromMagAngle :: R -> R -> Vec2d
 vec2dFromMagAngle mag angle = Vec2d (mag * sin angle) (mag * cos angle)
+
+-- 10.7
+
+xyProj :: Vec -> Vec
+xyProj (Vec x y _) = vec x y 0
+
+-- 10.8
+magAngles :: Vec -> (R, R, R)
+magAngles (Vec x y z) =
+  ( sqrt $ x ** 2 + y ** 2 + z ** 2,
+    atan2 (sqrt $ x ** 2 + y ** 2) z,
+    atan2 y x
+  )
