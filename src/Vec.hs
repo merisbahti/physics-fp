@@ -1,4 +1,4 @@
-module Vec (Vec (..), vec, iHat, jHat, kHat, zeroV, negateV, (^+^), (^-^), (^*), (*^), (^/), (<.>), (><), magnitude, Velocity, Acceleration, PosVec, positionCA, velocityCA, speedRateChange) where
+module Vec (Vec (..), vec, iHat, jHat, kHat, zeroV, negateV, (^+^), (^-^), (^*), (*^), (^/), (<.>), (><), magnitude, Velocity, Acceleration, PosVec, positionCA, velocityCA, speedRateChange, aParallel, aPerp) where
 
 import Lib (R, Time)
 
@@ -77,3 +77,12 @@ velocityCA v0 a0 t = v0 ^+^ (a0 ^* t)
 
 speedRateChange :: Vec -> Vec -> R
 speedRateChange v a = (v <.> a) / magnitude v
+
+aParallel :: Vec -> Vec -> Vec
+aParallel v a =
+  let vHat = v ^/ magnitude v
+   in (vHat <.> a)
+        *^ vHat
+
+aPerp :: Vec -> Vec -> Vec
+aPerp v a = a ^-^ aParallel v a

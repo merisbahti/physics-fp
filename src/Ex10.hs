@@ -2,10 +2,11 @@
 
 module Ex10 where
 
+import Control.Monad (ap)
 import Ex45 (vecSum)
 import Graphics.Gnuplot.Simple
 import Lib (R, Time)
-import Vec (Acceleration, PosVec, Vec (Vec, zComp), Velocity, iHat, jHat, kHat, magnitude, negateV, positionCA, speedRateChange, vec, (*^), (^*), (^+^), (^-^))
+import Vec (Acceleration, PosVec, Vec (Vec, xComp, yComp, zComp), Velocity, aParallel, aPerp, iHat, jHat, kHat, magnitude, negateV, positionCA, speedRateChange, vec, (*^), (^*), (^+^), (^-^))
 
 -- 10.1
 v0_ = 20 *^ iHat
@@ -45,8 +46,8 @@ projectileVel v0 = positionCA v0 (9.81 *^ negateV kHat)
 
 -- 10.6
 data Vec2d = Vec2d
-  { xComp :: R,
-    yComp :: R
+  { xComp2d :: R,
+    yComp2d :: R
   }
   deriving (Eq, Show)
 
@@ -94,3 +95,28 @@ solved = plotFunc [] (linearScale 1000 (0, 50 :: Double)) speedRateChangeBall
 vBallGraph = plotFunc [] (linearScale 1000 (0, 10 :: Double)) (zComp . vBall)
 
 -- At around 2 secs the speedRateChange is -5
+
+-- 10.10
+
+rUCM :: R -> R -> R -> Vec
+rUCM r omega t = r *^ (cos (omega * t) *^ iHat ^+^ sin (omega * t) *^ jHat)
+
+vUCM :: R -> R -> R -> Vec
+vUCM r omega t = omega *^ r *^ ((-1) *^ sin (omega * t) *^ iHat ^+^ cos (omega * t) *^ jHat)
+
+aUCM :: R -> R -> R -> Vec
+aUCM r omega t = (-1) *^ omega *^ omega *^ r *^ (cos (omega * t) *^ iHat ^+^ sin (omega * t) *^ jHat)
+
+particlePositiongraphX = plotFunc [] (linearScale 1000 (0, 2 :: Double)) (xComp . rUCM 2 6)
+
+particlePositiongraphY = plotFunc [] (linearScale 1000 (0, 2 :: Double)) (yComp . rUCM 2 6)
+
+particlePositiongraphZ = plotFunc [] (linearScale 1000 (0, 2 :: Double)) (zComp . rUCM 2 6)
+
+aParallel' = aParallel
+
+-- returns 0
+test1 = aParallel (vUCM 2 6 3) (aUCM 2 6 3)
+
+-- returns 2 * 6^2
+test2 = aPerp (vUCM 2 6 0) (aUCM 2 6 0)
